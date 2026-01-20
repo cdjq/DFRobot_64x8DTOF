@@ -3,7 +3,7 @@
  * @brief DFRobot_WY6005 class implementation
  * @copyright  Copyright (c) 2025 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @license The MIT License (MIT)
- * @author DFRobot
+ * @author [fary](feng.yang@dfrobot.com)
  * @version V1.0
  * @date 2025-04-10
  * @url https://github.com/DFRobot/DFRobot_WY6005
@@ -28,50 +28,10 @@ void DFRobot_WY6005::begin(uint32_t baudRate) {
 }
 
 bool DFRobot_WY6005::sendCommand(const String& command) {
-  const uint8_t syncSeq[WY6005_RESPONSE_OK_SEQ_LEN] = {WY6005_SYNC_BYTE_0, WY6005_SYNC_BYTE_1, WY6005_SYNC_BYTE_2, WY6005_SYNC_BYTE_3}; // "\nOK\n"
-  
-  for (int attempt = 0; attempt < WY6005_MAX_RETRY_COUNT; attempt++) {
-    DBG("Sending command: %s", command.c_str());
-    
-    // Send command
-    _serial->print(command);
-    _serial->print("\n");
-    
-    // Wait for response
-    unsigned long startTime = millis();
-    uint8_t recvBuf[WY6005_RESPONSE_OK_SEQ_LEN] = {0};
-    int idx = 0;
-    
-    while (millis() - startTime < WY6005_RESPONSE_TIMEOUT) {
-      if (_serial->available()) {
-        recvBuf[idx++] = _serial->read();
-        
-        if (idx == WY6005_RESPONSE_OK_SEQ_LEN) {
-          // Check if response matches expected sequence
-          bool match = true;
-          for (int i = 0; i < WY6005_RESPONSE_OK_SEQ_LEN; i++) {
-            if (recvBuf[i] != syncSeq[i]) {
-              match = false;
-              break;
-            }
-          }
-          
-          if (match) {
-            DBG("Command succeeded");
-            return true; // Success
-          } else {
-            DBG("Response mismatch");
-            break; // Response doesn't match, try again
-          }
-        }
-      }
-    }
-    
-    DBG("Command attempt %d failed, retrying...", attempt + 1);
-  }
-  
-  DBG("Command failed after %d attempts", WY6005_MAX_RETRY_COUNT);
-  return false; // All attempts failed
+  DBG("Sending command: %s", command.c_str());
+  _serial->print(command);
+  _serial->print("\n");
+  return true;
 }
 
 bool DFRobot_WY6005::setStreamControl(bool enable) {
@@ -113,15 +73,15 @@ bool DFRobot_WY6005::configSinglePointMode(uint8_t line, uint8_t point) {
   }
 
   if (!setStreamControl(false)) return false;
+  delay(700);
   if (!setOutputLineData(line, point, point)) return false;
-  bool res = setStreamControl(true);
-  if (res) {
-    _totalPoints = 1;
-    if (!saveConfig()) {
-      DBG("Warning: saveConfig failed after configSinglePointMode");
-    }
+  delay(700);
+  if (!saveConfig()) {
+    DBG("Warning: saveConfig failed after configSinglePointMode");
   }
-  return res;
+  delay(700);
+  _totalPoints = 1;
+  return setStreamControl(true);
 }
 
 bool DFRobot_WY6005::configSingleLineMode(uint8_t line, uint8_t startPoint, uint8_t endPoint) {
@@ -141,16 +101,17 @@ bool DFRobot_WY6005::configSingleLineMode(uint8_t line, uint8_t startPoint, uint
   }
 
   if (!setStreamControl(false)) return false;
+  delay(700);
   if (!setOutputLineData(line, startPoint, endPoint)) return false;
-  bool res = setStreamControl(true);
-  if (res) {
-    _totalPoints =  endPoint - startPoint + 1;
-    if (!saveConfig()) {
-      DBG("Warning: saveConfig failed after configSingleLineMode");
-    }
+  delay(700);
+  if (!saveConfig()) {
+    DBG("Warning: saveConfig failed after configSingleLineMode");
   }
-  return res;
+  delay(700);
+  _totalPoints = endPoint - startPoint + 1;
+  return setStreamControl(true);
 }
+
 
 bool DFRobot_WY6005::configSingleFrameMode(void) {
   DBG("Configuring single frame mode");
@@ -174,8 +135,6 @@ bool DFRobot_WY6005::configContinuousMode(void) {
   return setStreamControl(true);
 }
 
-// Parsing implementations removed - use triggerGetRaw for raw point reads
-
 void DFRobot_WY6005::parsePointData(const uint8_t* pointData, int16_t* x, int16_t* y, int16_t* z, int16_t* i) {
   *x = (int16_t)((pointData[1] << 8) | pointData[0]);
   *y = (int16_t)((pointData[3] << 8) | pointData[2]);
@@ -194,8 +153,7 @@ int DFRobot_WY6005::triggerGetRaw(int16_t* xBuf, int16_t* yBuf, int16_t* zBuf, i
   uint8_t frameBuffer[600]; 
   
   if (totalFrameSize > sizeof(frameBuffer)) return -1;
-
-  // Send command directly to trigger one frame
+  
   _serial->print("AT+SPAD_TRIG_ONE_FRAME=1");
   _serial->print("\n");
 
@@ -220,22 +178,41 @@ int DFRobot_WY6005::triggerGetRaw(int16_t* xBuf, int16_t* yBuf, int16_t* zBuf, i
           }
           return points;
         }
-      } // 检测同步序列
-      else if (frameIndex == 0 && c == 0x0A) {  // 'O'
-        frameBuffer[frameIndex++] = c;
       } 
-      else if (frameIndex == 1 && c == 0x4F) {  // 'K'
-        frameBuffer[frameIndex++] = c;
-      } 
-      else if (frameIndex == 2 && c == 0x4B) {  // '\r'
-        frameBuffer[frameIndex++] = c;
-      } 
-      else if (frameIndex == 3 && c == 0x0A) {  // '\n'
-        frameBuffer[frameIndex++] = c;
-        inSyncMode = true;      
-      } 
+      else {
+        // State machine for header validation (0x0A, 0x4F, 0x4B, 0x0A)
+        switch (frameIndex) {
+          case 0:
+            if (c == WY6005_SYNC_BYTE_0) frameBuffer[frameIndex++] = c;
+            break;
+          case 1:
+            if (c == WY6005_SYNC_BYTE_1) {
+                frameBuffer[frameIndex++] = c;
+            } else {
+                frameIndex = 0;
+                if (c == WY6005_SYNC_BYTE_0) frameBuffer[frameIndex++] = c;
+            }
+            break;
+          case 2:
+            if (c == WY6005_SYNC_BYTE_2) {
+                frameBuffer[frameIndex++] = c;
+            } else {
+                frameIndex = 0;
+                if (c == WY6005_SYNC_BYTE_0) frameBuffer[frameIndex++] = c;
+            }
+            break;
+          case 3:
+            if (c == WY6005_SYNC_BYTE_3) {
+                frameBuffer[frameIndex++] = c;
+                inSyncMode = true;
+            } else {
+                frameIndex = 0;
+                if (c == WY6005_SYNC_BYTE_0) frameBuffer[frameIndex++] = c;
+            }
+            break;
+        }
+      }
     }
   }
-    return -1; // Timeout
+  return -1; // Timeout
 }
-
