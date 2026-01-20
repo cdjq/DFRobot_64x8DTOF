@@ -1,0 +1,30 @@
+#######################################
+# Syntax Coloring Map For DFRobot_WY6005
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+DFRobot_WY6005	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+triggerGetRaw	KEYWORD2
+triggerOneFrame	KEYWORD2
+saveConfig	KEYWORD2
+configSinglePointMode	KEYWORD2
+configSingleLineMode	KEYWORD2
+configSingleFrameMode	KEYWORD2
+configContinuousMode	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+WY6005_RESPONSE_TIMEOUT	LITERAL1
+WY6005_MAX_RETRY_COUNT	LITERAL1
+WY6005_RESPONSE_OK_SEQ_LEN	LITERAL1
