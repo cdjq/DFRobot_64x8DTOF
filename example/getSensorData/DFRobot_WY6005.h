@@ -3,7 +3,7 @@
  * @brief DFRobot_WY6005 class infrastructure
  * @copyright  Copyright (c) 2026 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @license The MIT License (MIT)
- * @author [PLELES] (https://github.com/PLELES) 
+ * @author [PLELES] (https://github.com/PLELES)
  * @version V1.0
  * @date 2026-1-21
  * @url https://github.com/DFRobot/DFRobot_WY6005
@@ -15,39 +15,39 @@
 #define ENABLE_DBG
 
 #ifdef ENABLE_DBG
-#define DBG(...)                 \
-  {                              \
-    Serial.print("[");           \
-    Serial.print(__FUNCTION__);  \
-    Serial.print(":");        \
-    Serial.print(__LINE__);      \
-    Serial.print(" ] ");         \
-    char _buf[128];              \
-    sprintf(_buf, __VA_ARGS__);  \
-    Serial.println(_buf);        \
+#define DBG(...)                \
+  {                             \
+    Serial.print("[");          \
+    Serial.print(__FUNCTION__); \
+    Serial.print(":");          \
+    Serial.print(__LINE__);     \
+    Serial.print(" ] ");        \
+    char _buf[128];             \
+    sprintf(_buf, __VA_ARGS__); \
+    Serial.println(_buf);       \
   }
 #else
 #define DBG(...)
 #endif
 
-#define WY6005_RESPONSE_TIMEOUT     500   /*!< Response timeout in milliseconds */
-#define WY6005_MAX_RETRY_COUNT      5     /*!< Maximum number of retries for commands */
-#define WY6005_RESPONSE_OK_SEQ_LEN  4     /*!< Length of OK response sequence */
-#define WY6005_SYNC_BYTE_0          0x0A
-#define WY6005_SYNC_BYTE_1          0x4F
-#define WY6005_SYNC_BYTE_2          0x4B
-#define WY6005_SYNC_BYTE_3          0x0A
-#define WY6005_FRAME_HEADER_SIZE    4
-#define WY6005_POINT_DATA_SIZE      8
-#define WY6005_MAX_POINTS           (64 * 8)
+#define WY6005_RESPONSE_TIMEOUT    500 /*!< Response timeout in milliseconds */
+#define WY6005_MAX_RETRY_COUNT     5   /*!< Maximum number of retries for commands */
+#define WY6005_RESPONSE_OK_SEQ_LEN 4   /*!< Length of OK response sequence */
+#define WY6005_SYNC_BYTE_0         0x0A
+#define WY6005_SYNC_BYTE_1         0x4F
+#define WY6005_SYNC_BYTE_2         0x4B
+#define WY6005_SYNC_BYTE_3         0x0A
+#define WY6005_FRAME_HEADER_SIZE   4
+#define WY6005_POINT_DATA_SIZE     8
+#define WY6005_MAX_POINTS          (64 * 8)
 
 class DFRobot_WY6005 {
 private:
-  HardwareSerial *_serial;    /*!< Hardware serial port */
-  uint32_t        _config;    /*!< Serial port configuration */
-  int8_t          _rxPin;     /*!< RX pin number */
-  int8_t          _txPin;     /*!< TX pin number */
-  
+  HardwareSerial* _serial; /*!< Hardware serial port */
+  uint32_t        _config; /*!< Serial port configuration */
+  int8_t          _rxPin;  /*!< RX pin number */
+  int8_t          _txPin;  /*!< TX pin number */
+
   /**
    * @fn sendCommand
    * @brief Send AT command and wait for response
@@ -57,7 +57,7 @@ private:
    * @retval false: Failure
    */
   bool sendCommand(const String& command);
-  
+
   /**
    * @fn setStreamControl
    * @brief Set stream control
@@ -67,7 +67,7 @@ private:
    * @retval false: Failure
    */
   bool setStreamControl(bool enable);
-  
+
   /**
    * @fn setFrameMode
    * @brief Set frame mode
@@ -77,7 +77,7 @@ private:
    * @retval false: Failure
    */
   bool setFrameMode(bool continuousMode);
-  
+
   /**
    * @fn setOutputLineData
    * @brief Set output line data
@@ -90,10 +90,10 @@ private:
    */
   bool setOutputLineData(uint8_t line, uint8_t startPoint, uint8_t pointCount);
 
-  int _startPoint; /*!< Start point */
-  int _endPoint;   /*!< End point */
-  int _totalPoints;/*!< Total points */
-  
+  int _startPoint;  /*!< Start point */
+  int _endPoint;    /*!< End point */
+  int _totalPoints; /*!< Total points */
+
 public:
   /**
    * @struct sPoint_t
@@ -105,7 +105,7 @@ public:
     int16_t zBuf[WY6005_MAX_POINTS]; /*!< Z-axis coordinate buffer (Distance) */
     int16_t iBuf[WY6005_MAX_POINTS]; /*!< Intensity buffer */
   } sPoint_t;
-  
+
   /**
    * @fn DFRobot_WY6005
    * @brief Constructor, passing in serial port and configuration
@@ -114,15 +114,15 @@ public:
    * @param rxPin RX pin number
    * @param txPin TX pin number
    */
-  DFRobot_WY6005(HardwareSerial &serial, uint32_t config, int8_t rxPin , int8_t txPin);
-  
+  DFRobot_WY6005(HardwareSerial& serial, uint32_t config, int8_t rxPin, int8_t txPin);
+
   /**
    * @fn begin
    * @brief Initialize the sensor
    * @param baudRate Serial communication baud rate
    */
   void begin(uint32_t baudRate);
-  
+
   /**
    * @fn parsePointData
    * @brief Parse point data
@@ -133,7 +133,7 @@ public:
    * @param i Intensity
    */
   void parsePointData(const uint8_t* pointData, int16_t* x, int16_t* y, int16_t* z, int16_t* i);
-  
+
   /**
    * @fn triggerGetRaw
    * @brief Trigger one frame and read raw x/y/z values (no filtering)
@@ -155,7 +155,7 @@ public:
    * @retval false: Failure
    */
   bool triggerOneFrame(void);
-  
+
   /**
    * @fn saveConfig
    * @brief Save configuration to sensor
@@ -164,7 +164,7 @@ public:
    * @retval false: Failure
    */
   bool saveConfig(void);
-  
+
   /**
    * @fn configSinglePointMode
    * @brief Configure single point mode
@@ -175,7 +175,7 @@ public:
    * @retval false: Failure
    */
   bool configSinglePointMode(uint8_t line, uint8_t point);
-  
+
   /**
    * @fn configSingleLineMode
    * @brief Configure single line mode
@@ -196,7 +196,7 @@ public:
    * @retval false: Failure
    */
   bool configSingleFrameMode(void);
-  
+
   /**
    * @fn configContinuousMode
    * @brief Configure continuous mode

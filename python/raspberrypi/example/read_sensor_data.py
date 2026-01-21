@@ -12,19 +12,28 @@
 
 import sys
 import time
+import serial
 
 sys.path.append("../")
 from DFRobot_WY6005 import DFRobot_WY6005
 
 # Initialize sensor with UART port
-# Please change '/dev/ttyUSB0' to your actual serial port
-wy6005 = DFRobot_WY6005(port="/dev/ttyUSB0", baudrate=921600)
+# If you are using a USB-to-serial converter, use '/dev/ttyUSB0'
+# If you are using Raspberry Pi GPIO (TX/RX), use '/dev/serial0' (Recommended for GPIO)
+# Note: Ensure Serial Hardware is enabled in 'sudo raspi-config' -> Interface Options
+try:
+  wy6005 = DFRobot_WY6005(port="/dev/serial0", baudrate=921600)
+except serial.SerialException as e:
+  print(f"Error: Could not open serial port: {e}")
+  print("Please allow permission to read/write the serial port or change the port name.")
+  sys.exit(1)
 
 # Demo Mode Selection
 # 0: Full Output Mode (All 8x64 points)
 # 1: Single Line Mode (Line 4, points 0-63)
 # 2: Single Point Mode (Line 4, Point 32)
 demo_mode = 0
+
 
 def setup():
   print("WY6005 init...")
@@ -33,7 +42,7 @@ def setup():
   while not wy6005.config_single_frame_mode():
     print("failed, Connection error or device busy!")
     time.sleep(1)
-  
+
   print("successed")
 
   ret = False
@@ -57,16 +66,17 @@ def loop():
   # Trigger acquisition of one frame
   # returns lists: x, y, z, intensity
   list_x, list_y, list_z, list_i = wy6005.trigger_get_raw(timeout_ms=1000)
-  
+
   if len(list_x) > 0:
     print(f"Received {len(list_x)} points")
-    # Print the middle point data as example
-    idx = len(list_x) // 2
-    print(f"Sample Point[{idx}]: X:{list_x[idx]} Y:{list_y[idx]} Z:{list_z[idx]} I:{list_i[idx]}")
+    # Print data for every point
+    for idx in range(len(list_x)):
+      print(f"Point[{idx}]: X:{list_x[idx]} Y:{list_y[idx]} Z:{list_z[idx]} I:{list_i[idx]}")
   else:
     print("No data received or timeout")
-  
-  time.sleep(1)
+
+  time.sleep(2)
+
 
 if __name__ == "__main__":
   setup()

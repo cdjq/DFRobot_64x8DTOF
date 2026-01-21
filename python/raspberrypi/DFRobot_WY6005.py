@@ -223,16 +223,23 @@ class DFRobot_WY6005:
     '''
     points = self.total_points if self.total_points else (max_points or self.WY6005_MAX_POINTS)
     point_bytes = points * self.WY6005_POINT_DATA_SIZE
-    total_size = self.WY6005_FRAME_HEADER_SIZE + point_bytes
+    # We have already consumed the header in _find_sync
+    # total_size should only be the data size
+    total_size = point_bytes
 
     # Flush buffer to avoid stale data
     self.ser.reset_input_buffer()
 
-    # Trigger frame
-    self.trigger_one_frame()
-
-    if not self._find_sync(timeout_ms / 1000.0):
-      return [], [], [], []
+    # Try multiple attempts to get sync
+    max_retries = 3
+    for attempt in range(max_retries):
+      self.trigger_one_frame()
+      if self._find_sync(timeout_ms / 1000.0):
+        # Found sync, break and read payload
+        break
+      # If sync not found, loop and retry trigger
+      if attempt == max_retries - 1:
+        return [], [], [], []
 
     payload = self.ser.read(total_size)
     if len(payload) != total_size:
@@ -244,7 +251,8 @@ class DFRobot_WY6005:
     i_list = []
 
     for i in range(points):
-      offset = self.WY6005_FRAME_HEADER_SIZE + i * self.WY6005_POINT_DATA_SIZE
+      # Offset starts at 0 since payload contains only point data now
+      offset = i * self.WY6005_POINT_DATA_SIZE
       if offset + self.WY6005_POINT_DATA_SIZE > len(payload):
         break
       val_x, val_y, val_z, val_i = struct.unpack_from('<hhhh', payload, offset)
