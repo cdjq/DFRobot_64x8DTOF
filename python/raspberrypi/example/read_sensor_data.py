@@ -1,40 +1,61 @@
-import time
+# -*- coding: utf-8 -*-
+'''
+@file read_sensor_data.py
+@brief Read sensor data from DFRobot_WY6005.
+@copyright   Copyright (c) 2026 DFRobot Co.Ltd (http://www.dfrobot.com)
+@license     The MIT license (MIT)
+@author [PLELES] (https://github.com/PLELES)
+@version  V1.0
+@date  2026-1-21
+@https://github.com/DFRobot/DFRobot_WY6005
+'''
+
 import sys
+import time
 
 sys.path.append("../")
-from DFRobot_FRN20 import DFRobot_FRN20
+from DFRobot_WY6005 import DFRobot_WY6005
 
-frn20 = DFRobot_FRN20()
-
+# Initialize sensor with UART port
+# Please change '/dev/ttyUSB0' to your actual serial port
+wy6005 = DFRobot_WY6005(port="/dev/ttyUSB0", baudrate=921600)
 
 def setup():
-  print("FRN20 init...")
+  print("WY6005 init...")
 
-  while frn20.begin() != 1:
-    print("failed, Not found FRN20!")
+  # Retry configuration until success
+  while not wy6005.config_single_frame_mode():
+    print("failed, Connection error or device busy!")
+    time.sleep(1)
+  
   print("successed")
 
-  if frn20.read_params():
-    print(f"Unit: {frn20.params.unit}  L/min")
-    print(f"Range: {hex(frn20.params.range)}  L/min")
-    print(f"Offset: {frn20.params.offset}")
-    print(f"Medium Coefficient: {frn20.params.medium_coeff}")
-    print(f"Output Voltage Lower Limit: {frn20.params.vout_min_mv}  mV")
-    print(f"Output Voltage Upper Limit: {frn20.params.vout_max_mv}  mV")
-    product_id = ''.join([chr(b) for b in frn20.params.product_id if b != 0])
-    print(f"Product ID: {product_id}")
-    print(f"CRC: {hex(frn20.params.crc)}")
+  # Configure to full output mode (get all 64*8 points)
+  if wy6005.config_full_output_mode():
+    print("Config Full Output Mode: Success")
   else:
-    print("Failed, read_params error!")
-
+    print("Config Full Output Mode: Failed")
 
 def loop():
-  frn20.read_raw_flow_data()
-  frn20.read_mass_flow_data()
-  print(f"Raw Value: {frn20.raw_flow_data} SLM")
-  print(f"Flow Value: {frn20.mass_flow_data} SLM")
-  time.sleep(2)
+  # Trigger acquisition of one frame
+  # returns lists: x, y, z, intensity
+  x, y, z, i = wy6005.trigger_get_raw(timeout_ms=1000)
+  
+  if len(x) > 0:
+    print(f"Received {len(x)} points")
+    # Print the middle point data as example
+    idx = len(x) // 2
+    print(f"Sample Point[{idx}]: X:{x[idx]} Y:{y[idx]} Z:{z[idx]} I:{i[idx]}")
+  else:
+    print("No data received or timeout")
+  
+  time.sleep(1)
 
-
-setup()
-loop()
+if __name__ == "__main__":
+  setup()
+  try:
+    while True:
+      loop()
+  except KeyboardInterrupt:
+    wy6005.close()
+    print("Program stopped")

@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
-"""
+'''
 @file DFRobot_WY6005.py
-@brief Python driver for the DFRobot WY6005 64x8 dToF sensor (UART).
-@copyright  Copyright (c) 2025 DFRobot Co.Ltd
-@license    The MIT license (MIT)
-@author     [fary](feng.yang@dfrobot.com)
-@version    V1.0
-@date       2025-12-15
-@url        https://github.com/DFRobot/DFRobot_WY6005
-"""
+@brief Define the basic structure and methods of the DFRobot_WY6005 class.
+@copyright   Copyright (c) 2026 DFRobot Co.Ltd (http://www.dfrobot.com)
+@license     The MIT license (MIT)
+@author [PLELES] (https://github.com/PLELES)
+@version  V1.0
+@date  2026-1-21
+@https://github.com/DFRobot/DFRobot_WY6005
+'''
 
 import struct
 import time
-from typing import List, Optional, Tuple
 import serial
 
 
@@ -22,41 +21,91 @@ class DFRobot_WY6005:
   WY6005_POINT_DATA_SIZE = 8
   WY6005_MAX_POINTS = 64 * 8  # 64 points per line, 8 lines
 
-  def __init__(self, port: str, baudrate: int = 921600, timeout: float = 0.5):
-    """
+  def __init__(self, port, baudrate=921600, timeout=0.5):
+    '''
+    @fn __init__
     @brief Initialize sensor over UART.
-    @param port UART device path, e.g. '/dev/ttyUSB0'.
-    @param baudrate Baudrate, default 921600.
-    @param timeout Read timeout in seconds.
-    """
+    @param port: UART device path, e.g. '/dev/ttyUSB0'.
+    @param baudrate: Baudrate, default 921600.
+    @param timeout: Read timeout in seconds.
+    @return None
+    '''
     self.ser = serial.Serial(port=port, baudrate=baudrate, timeout=timeout)
     self.total_points = self.WY6005_MAX_POINTS
 
   def close(self):
+    '''
+    @fn close
+    @brief Close the serial port.
+    @return None
+    '''
     if self.ser and self.ser.is_open:
       self.ser.close()
 
-  def _send_command(self, command: str) -> bool:
+  def _send_command(self, command):
+    '''
+    @fn _send_command
+    @brief Send a command to the sensor.
+    @param command: Command string to send.
+    @return bool: True if command sent successfully.
+    '''
     cmd = (command + "\n").encode("ascii")
     self.ser.write(cmd)
     return True
 
-  def set_stream_control(self, enable: bool) -> bool:
+  def set_stream_control(self, enable):
+    '''
+    @fn set_stream_control
+    @brief Set stream control.
+    @param enable: Enable stream control.
+    @return bool: True if command sent successfully.
+    '''
     return self._send_command(f"AT+STREAM_CONTROL={'1' if enable else '0'}")
 
-  def set_frame_mode(self, continuous: bool) -> bool:
+  def set_frame_mode(self, continuous):
+    '''
+    @fn set_frame_mode
+    @brief Set frame mode.
+    @param continuous: Enable continuous mode.
+    @return bool: True if command sent successfully.
+    '''
     return self._send_command(f"AT+SPAD_FRAME_MODE={'1' if continuous else '0'}")
 
-  def set_output_line_data(self, line: int, start_point: int, point_count: int) -> bool:
+  def set_output_line_data(self, line, start_point, point_count):
+    '''
+    @fn set_output_line_data
+    @brief Set output line data.
+    @param line: Line number.
+    @param start_point: Start point number.
+    @param point_count: Point count.
+    @return bool: True if command sent successfully.
+    '''
     return self._send_command(f"AT+SPAD_OUTPUT_LINE_DATA={line},{start_point},{point_count}")
 
-  def trigger_one_frame(self) -> bool:
+  def trigger_one_frame(self):
+    '''
+    @fn trigger_one_frame
+    @brief Trigger one frame data output.
+    @return bool: True if command sent successfully.
+    '''
     return self._send_command("AT+SPAD_TRIG_ONE_FRAME=1")
 
-  def save_config(self) -> bool:
+  def save_config(self):
+    '''
+    @fn save_config
+    @brief Save configuration to sensor.
+    @return bool: True if command sent successfully.
+    '''
     return self._send_command("AT+SAVE_CONFIG")
 
-  def config_single_point_mode(self, line: int, point: int) -> bool:
+  def config_single_point_mode(self, line, point):
+    '''
+    @fn config_single_point_mode
+    @brief Configure single point mode.
+    @param line: Line number.
+    @param point: Point number.
+    @return bool: True if configuration successful.
+    '''
     if line < 1 or line > 8:
       return False
     if point < 0 or point > 64:
@@ -72,7 +121,15 @@ class DFRobot_WY6005:
     self.total_points = 1
     return self.set_stream_control(True)
 
-  def config_single_line_mode(self, line: int, start_point: int, end_point: int) -> bool:
+  def config_single_line_mode(self, line, start_point, end_point):
+    '''
+    @fn config_single_line_mode
+    @brief Configure single line mode.
+    @param line: Line number.
+    @param start_point: Start point number.
+    @param end_point: End point number.
+    @return bool: True if configuration successful.
+    '''
     if line < 1 or line > 8:
       return False
     if start_point < 0 or start_point > 64 or end_point < 0 or end_point > 64:
@@ -90,7 +147,12 @@ class DFRobot_WY6005:
     self.total_points = end_point - start_point + 1
     return self.set_stream_control(True)
 
-  def config_full_output_mode(self) -> bool:
+  def config_full_output_mode(self):
+    '''
+    @fn config_full_output_mode
+    @brief Configure full output mode.
+    @return bool: True if configuration successful.
+    '''
     # Per device manual: line=0, start=32, count=32 outputs all points.
     if not self.set_stream_control(False):
       return False
@@ -103,7 +165,12 @@ class DFRobot_WY6005:
     self.total_points = self.WY6005_MAX_POINTS
     return self.set_stream_control(True)
 
-  def config_single_frame_mode(self) -> bool:
+  def config_single_frame_mode(self):
+    '''
+    @fn config_single_frame_mode
+    @brief Configure single frame mode.
+    @return bool: True if configuration successful.
+    '''
     if not self.set_stream_control(False):
       return False
     if not self.set_frame_mode(True):
@@ -111,7 +178,12 @@ class DFRobot_WY6005:
     self.save_config()
     return self.set_stream_control(True)
 
-  def config_continuous_mode(self) -> bool:
+  def config_continuous_mode(self):
+    '''
+    @fn config_continuous_mode
+    @brief Configure continuous mode.
+    @return bool: True if configuration successful.
+    '''
     if not self.set_stream_control(False):
       return False
     if not self.set_frame_mode(False):
@@ -119,7 +191,13 @@ class DFRobot_WY6005:
     self.save_config()
     return self.set_stream_control(True)
 
-  def _find_sync(self, timeout_s: float) -> bool:
+  def _find_sync(self, timeout_s):
+    '''
+    @fn _find_sync
+    @brief Find the synchronization bytes in the UART stream.
+    @param timeout_s: Timeout in seconds.
+    @return bool: True if sync bytes found, False otherwise.
+    '''
     deadline = time.time() + timeout_s
     sync_len = len(self.WY6005_SYNC_BYTES)
     idx = 0
@@ -135,13 +213,14 @@ class DFRobot_WY6005:
         idx = 1 if b[0] == self.WY6005_SYNC_BYTES[0] else 0
     return False
 
-  def trigger_get_raw(self, max_points: Optional[int] = None, timeout_ms: int = 500) -> Tuple[List[int], List[int], List[int], List[int]]:
-    """
+  def trigger_get_raw(self, max_points=None, timeout_ms=500):
+    '''
+    @fn trigger_get_raw
     @brief Trigger one frame and read raw x/y/z/i arrays.
-    @param max_points Optional cap. If not set, uses configured total_points.
-    @param timeout_ms Timeout to wait for a frame.
+    @param max_points: Optional cap. If not set, uses configured total_points.
+    @param timeout_ms: Timeout to wait for a frame.
     @return tuple of lists (x, y, z, intensity); empty lists if timeout/error.
-    """
+    '''
     points = self.total_points if self.total_points else (max_points or self.WY6005_MAX_POINTS)
     point_bytes = points * self.WY6005_POINT_DATA_SIZE
     total_size = self.WY6005_FRAME_HEADER_SIZE + point_bytes
@@ -159,10 +238,10 @@ class DFRobot_WY6005:
     if len(payload) != total_size:
       return [], [], [], []
 
-    x_list: List[int] = []
-    y_list: List[int] = []
-    z_list: List[int] = []
-    i_list: List[int] = []
+    x_list = []
+    y_list = []
+    z_list = []
+    i_list = []
 
     for i in range(points):
       offset = self.WY6005_FRAME_HEADER_SIZE + i * self.WY6005_POINT_DATA_SIZE
@@ -175,15 +254,3 @@ class DFRobot_WY6005:
       i_list.append(inten)
 
     return x_list, y_list, z_list, i_list
-
-
-if __name__ == "__main__":
-  # Simple sanity check (requires actual hardware connected)
-  sensor = DFRobot_WY6005(port="/dev/ttyUSB0", baudrate=921600)
-  try:
-    sensor.config_single_frame_mode()
-    sensor.config_full_output_mode()
-    xs, ys, zs, is_ = sensor.trigger_get_raw(timeout_ms=300)
-    print(f"Received points: {len(xs)}")
-  finally:
-    sensor.close()

@@ -1,11 +1,11 @@
 /*!
  * @file DFRobot_WY6005.h
  * @brief DFRobot_WY6005 class infrastructure
- * @copyright  Copyright (c) 2025 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @copyright  Copyright (c) 2026 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @license The MIT License (MIT)
- * @author [fary](feng.yang@dfrobot.com)
+ * @author [PLELES] (https://github.com/PLELES) 
  * @version V1.0
- * @date 2025-04-10
+ * @date 2026-1-21
  * @url https://github.com/DFRobot/DFRobot_WY6005
  */
 #ifndef _DFROBOT_WY6005_H_
@@ -43,7 +43,7 @@
 
 class DFRobot_WY6005 {
 private:
-  HardwareSerial* _serial;    /*!< Hardware serial port */
+  HardwareSerial *_serial;    /*!< Hardware serial port */
   uint32_t        _config;    /*!< Serial port configuration */
   int8_t          _rxPin;     /*!< RX pin number */
   int8_t          _txPin;     /*!< TX pin number */

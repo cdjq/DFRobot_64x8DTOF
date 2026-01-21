@@ -163,7 +163,7 @@ for i in range(len(points)):
 | Micro:bit | | |  | |
 
 ## History
-- Date: 2025-04-10
+- Date: 2026-1-21
 - Version: V1.0.0
 - Initial release of the DFRobot_WY6005 library
 
