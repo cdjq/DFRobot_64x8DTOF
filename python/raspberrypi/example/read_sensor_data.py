@@ -24,7 +24,7 @@ wy6005 = DFRobot_WY6005(port="/dev/ttyUSB0", baudrate=921600)
 # 0: Full Output Mode (All 8x64 points)
 # 1: Single Line Mode (Line 4, points 0-63)
 # 2: Single Point Mode (Line 4, Point 32)
-DEMO_MODE = 0
+demo_mode = 0
 
 def setup():
   print("WY6005 init...")
@@ -37,16 +37,16 @@ def setup():
   print("successed")
 
   ret = False
-  if DEMO_MODE == 0:
+  if demo_mode == 0:
     # Configure to full output mode (get all 64*8 points)
     ret = wy6005.config_full_output_mode()
     print(f"Config Full Output Mode: {'Success' if ret else 'Failed'}")
-  elif DEMO_MODE == 1:
+  elif demo_mode == 1:
     # Configure to single line mode (Line 4, all 64 points)
     # config_single_line_mode(line, start_point, end_point)
     ret = wy6005.config_single_line_mode(4, 1, 64)
     print(f"Config Single Line Mode (Line 4): {'Success' if ret else 'Failed'}")
-  elif DEMO_MODE == 2:
+  elif demo_mode == 2:
     # Configure to single point mode (Line 4, Point 32)
     # config_single_point_mode(line, point)
     ret = wy6005.config_single_point_mode(4, 32)
