@@ -1,3 +1,13 @@
+/*!
+ * @file getSinglePoint.ino
+ * @brief Example of getting single point data
+ * @copyright  Copyright (c) 2026 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @license The MIT License (MIT)
+ * @author [PLELES] (https://github.com/PLELES)
+ * @version V1.0
+ * @date 2026-1-21
+ * @url https://github.com/DFRobot/DFRobot_WY6005
+ */
 #include "DFRobot_WY6005.h"
 
 // Instantiate the sensor object
@@ -28,6 +38,8 @@ void setup()
   } else {
     Serial.println("Configuration Failed!");
   }
+  while(Serial1.available()) Serial1.read();
+  delay(500);
 }
 
 void loop()
