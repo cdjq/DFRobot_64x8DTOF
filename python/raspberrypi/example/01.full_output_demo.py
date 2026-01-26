@@ -39,6 +39,8 @@ def setup():
   ret = dtof64x8.config_measure_mode()
   print(f"Config Full Output Mode: {'Success' if ret else 'Failed'}")
 
+  time.sleep(0.5)
+
 
 def loop():
   # Trigger acquisition of one frame

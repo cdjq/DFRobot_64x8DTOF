@@ -29,7 +29,7 @@ void setup()
   // 2. Configure Single Point Mode
   // Example: Line 4, Point 32 (Center of the sensor roughly)
   // Line range: 1-8
-  // Point range: 0-63
+  // Point range: 1-64
   Serial.println("Configuring Single Point Mode (Line 4, Point 32)...");
   if (dtof64x8.configMeasureMode(LINE_NUM, POINT_NUM)) {
     Serial.println("Configuration Successful!");

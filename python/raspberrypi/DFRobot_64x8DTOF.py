@@ -85,15 +85,20 @@ class DFRobot_64x8DTOF:
     @fn _set_output_line_data
     @brief Set which line/points are output by the sensor (private helper).
     @param line: Line number (0..8). Use 0 for global/full configuration.
-    @param start_point: Start point index (0..63).
-    @param end_point: End point index (0..63).
+    @param start_point: Start point index (1-64).
+    @param end_point: End point index (1-64).
     @return bool: True if command sent successfully.
     '''
     if line < 0 or line > 8:
       return False
-    if start_point < 0 or start_point > 63:
+    # line == 0 is used for global/full configuration and may accept device-specific
+    # start/end semantics (keep passthrough for compatibility)
+    if line == 0:
+      return self._send_command(f"AT+SPAD_OUTPUT_LINE_DATA={line},{start_point},{end_point}")
+    # For per-line configuration enforce 1..64 indexing for points
+    if start_point < 1 or start_point > 64:
       return False
-    if end_point < 0 or end_point > 63:
+    if end_point < 1 or end_point > 64:
       return False
     if end_point < start_point:
       return False
@@ -229,7 +234,7 @@ class DFRobot_64x8DTOF:
     @details
       - no args -> full output mode
       - (line,) -> single line mode (line: 1..8)
-      - (line, point) -> single point mode (line:1..8, point:0..63)
+      - (line, point) -> single point mode (line:1..8, point:1-64)
     @return bool: True if configuration successful.
     '''
     if len(args) == 0:

@@ -56,7 +56,7 @@ void begin(uint32_t baudRate);
  * @param timeoutMs Timeout in milliseconds to wait for a complete frame
  * @return Number of points parsed, or -1 on error/timeout
  */
-int getData(uint32_t timeoutMs = 500);
+int getData(uint32_t timeoutMs = 300);
 
 /**
  * @fn configMeasureMode

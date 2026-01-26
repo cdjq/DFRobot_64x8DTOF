@@ -50,7 +50,7 @@ def config_measure_mode(self, *args):
     @param *args: Variable arguments for mode selection:
     @n - no args -> full output (all points)
     @n - (line,) -> single line mode (line: 1..8)
-    @n - (line, point) -> single point mode (line:1..8, point:0..63)
+    @n - (line, point) -> single point mode (line:1..8, point:1-64)
     @return bool: True on success, False on failure.
     @retval True Configuration successful
     @retval False Configuration failed

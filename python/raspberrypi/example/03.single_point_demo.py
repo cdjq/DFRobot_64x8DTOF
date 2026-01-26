@@ -39,6 +39,7 @@ def setup():
   ret = dtof64x8.config_measure_mode(4, 32)
   print(f"Config Single Point Mode (Line 4, Point 32): {'Success' if ret else 'Failed'}")
 
+  time.sleep(0.5)
 
 def loop():
   # Trigger acquisition of one frame

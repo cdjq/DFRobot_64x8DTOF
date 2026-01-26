@@ -183,7 +183,7 @@ public:
    * @param timeoutMs Timeout in milliseconds to wait for a complete frame
    * @return Number of points parsed, or -1 on error/timeout,-2 sizeout
    */
-  int getData(uint32_t timeoutMs = 500);
+  int getData(uint32_t timeoutMs = 300);
 
   /**
    * @fn configMeasureMode
@@ -204,9 +204,9 @@ public:
 
   /**
    * @fn configMeasureMode
-   * @brief Configure measurement output mode — Single point..
-   * @param lineNum Line index containing the point (1..8).
-   * @param pointNum Point index within the line (0..64).
+  * @brief Configure measurement output mode — Single point.
+  * @param lineNum Line index containing the point (1..8).
+  * @param pointNum Point index within the line (1..64).
    * @return bool True if configuration succeeded and stream control restored,
    *              false on communication error or invalid arguments.
    */

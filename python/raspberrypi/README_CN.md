@@ -50,7 +50,7 @@ def config_measure_mode(self, *args):
     @param *args: 模式选择的变量参数：
     @n - 无参数 -> 全点输出（所有点）
     @n - (line,) -> 单线模式（line: 1..8）
-    @n - (line, point) -> 单点模式（line:1..8, point:0..63）
+    @n - (line, point) -> 单点模式（line:1..8, point:1-64）
     @return bool: 成功返回 True，失败返回 False。
     @retval True 配置成功
     @retval False 配置失败

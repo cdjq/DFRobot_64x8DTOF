@@ -57,7 +57,7 @@ void begin(uint32_t baudRate);
  * @param timeoutMs 超时（毫秒）
  * @return 解析到的点数，超时或错误返回 -1
  */
-int getData(uint32_t timeoutMs = 500);
+int getData(uint32_t timeoutMs = 300);
 
 /**
  * @fn configMeasureMode

@@ -81,6 +81,17 @@ bool DFRobot_64x8DTOF::setFrameMode(bool continuousMode)
 
 bool DFRobot_64x8DTOF::setOutputLineData(uint8_t line, uint8_t startPoint, uint8_t endPoint)
 {
+  // Validate line range (0 allowed for global/full configuration)
+  if (line > 8) return false;
+  // If line == 0, allow passthrough for device-specific full/global config
+  if (line == 0) {
+    String command = "AT+SPAD_OUTPUT_LINE_DATA=" + String(line) + "," + String(startPoint) + "," + String(endPoint);
+    return sendCommand(command);
+  }
+  // For per-line configuration, enforce 1..64 indexing for points
+  if (startPoint < 1 || startPoint > 64) return false;
+  if (endPoint < 1 || endPoint > 64) return false;
+  if (endPoint < startPoint) return false;
   String command = "AT+SPAD_OUTPUT_LINE_DATA=" + String(line) + "," + String(startPoint) + "," + String(endPoint);
   return sendCommand(command);
 }
