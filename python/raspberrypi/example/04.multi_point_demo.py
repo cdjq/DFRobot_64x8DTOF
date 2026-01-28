@@ -16,6 +16,11 @@ import serial
 sys.path.append("../")
 from DFRobot_64x8DTOF import DFRobot_64x8DTOF
 
+# Configuration macros
+LINES = 4
+START_POINT = 10
+END_POINT = 20
+
 # Initialize sensor with UART port
 # If you are using a USB-to-serial converter, use '/dev/ttyUSB0'
 # If you are using Raspberry Pi GPIO (TX/RX), use '/dev/serial0' (Recommended for GPIO)
@@ -42,13 +47,13 @@ def setup():
     time.sleep(0.2)
   print("Config Single Frame Mode: Success")
 
-  # Configure to multi point mode (Line 4, Points 10 to 20) (retry until success)
-  # Arguments: Line number (4), Start point (10), End point (20)
-  print("Configuring Multi Point Mode (Line 4, Points 10-20)...")
-  while not dtof64x8.config_measure_mode(4, 10, 20):
+  # Configure to multi point mode using macros (retry until success)
+  # Arguments: Line number, Start point, End point
+  print(f"Configuring Multi Point Mode (Line {LINES}, Points {START_POINT}-{END_POINT})...")
+  while not dtof64x8.config_measure_mode(LINES, START_POINT, END_POINT):
     print("Config Multi Point Mode failed, retrying...")
     time.sleep(0.2)
-  print("Config Multi Point Mode (Line 4, Points 10-20): Success")
+  print(f"Config Multi Point Mode (Line {LINES}, Points {START_POINT}-{END_POINT}): Success")
 
   time.sleep(0.5)
 
@@ -59,11 +64,10 @@ def loop():
 
   if len(list_x) > 0:
     print(f"Received {len(list_x)} points")
-    # Print data for every point in the configured range
-    for idx, x_val in enumerate(list_x):
-      # Note: The index in list is relative to the result buffer (0..N-1)
-      # The actual point index on sensor would be 10 + idx
-      print(f"Index[{idx:02d}]: X:{x_val:04d} mm Y:{list_y[idx]:04d} mm Z:{list_z[idx]:04d} mm I:{list_i[idx]}")
+    # Output each point with Point[index] prefix and x,y,z values
+    for i in range(len(list_x)):
+      point_idx = START_POINT + i
+      print(f"Point[{point_idx:02d}] X:{list_x[i]:04d} mm Y:{list_y[i]:04d} mm Z:{list_z[i]:04d} mm")
   else:
     print("No data received or timeout")
 

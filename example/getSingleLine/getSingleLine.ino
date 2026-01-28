@@ -39,26 +39,20 @@ void setup()
 
 void loop()
 {
-  int parsed = dtof64x8.getData(300);
-  
-  if (parsed > 0) {
-    Serial.print("Parsed ");
-    Serial.print(parsed);
-    Serial.println(" points:");
-    for (int i = 0; i < parsed; i++) {
+  int cnt = dtof64x8.getData(300);
+  Serial.print("Got points: ");
+  Serial.println(cnt);
+  if (cnt > 0) {
+    for (int i = 0; i < cnt; i++) {
       char numbuf[16];
-      Serial.print("["); if (i < 10) Serial.print("0"); Serial.print(i); Serial.print("]");
+      Serial.print(1 + i);
       Serial.print(": X="); sprintf(numbuf, "%04d", dtof64x8.point.xBuf[i]); Serial.print(numbuf); Serial.print(" mm ");
       Serial.print("Y="); sprintf(numbuf, "%04d", dtof64x8.point.yBuf[i]); Serial.print(numbuf); Serial.print(" mm ");
       Serial.print("Z="); sprintf(numbuf, "%04d", dtof64x8.point.zBuf[i]); Serial.print(numbuf); Serial.print(" mm ");
       Serial.print("I="); Serial.println(dtof64x8.point.iBuf[i]);
     }
-  } else if (parsed == 0) {
-    Serial.println(parsed);
-    Serial.println("No points parsed");
-  } else {
-    Serial.println(parsed);
-    Serial.println("Error or timeout while reading frame");
+  }else {
+    Serial.println("getData timeout or error");
   }
   delay(500);
 }

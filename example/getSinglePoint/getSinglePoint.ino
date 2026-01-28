@@ -11,7 +11,7 @@
 #include "DFRobot_64x8DTOF.h"
 
 #define LINE_NUM  4
-#define POINT_NUM 2
+#define POINT_NUM 32
 // Instantiate the sensor object
 // Use Serial1 for communication, change pins 25/26 to your actual RX/TX pins
 DFRobot_64x8DTOF dtof64x8(Serial1, SERIAL_8N1, 25, 26);
@@ -46,7 +46,6 @@ void setup()
 void loop()
 {
   int parsed = dtof64x8.getData(300);
-
   if (parsed > 0) {
     char numbuf[16];
     Serial.print("Point Data -> ");
@@ -54,10 +53,8 @@ void loop()
     Serial.print("Y: "); sprintf(numbuf, "%04d", dtof64x8.point.yBuf[0]); Serial.print(numbuf); Serial.print(" mm, ");
     Serial.print("Z: "); sprintf(numbuf, "%04d", dtof64x8.point.zBuf[0]); Serial.print(numbuf); Serial.print(" mm, ");
     Serial.print("I: "); Serial.println(dtof64x8.point.iBuf[0]); 
-  } else if (parsed == -1){
-    Serial.println("Read timeout");
-  } else if (parsed == -2){
-    Serial.println("Error Out of databuf");
+  } else {
+    Serial.println("getData timeout or error");
   }
   
 

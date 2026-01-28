@@ -128,8 +128,7 @@ bool configFrameMode(eFrameMode_t mode);
 | Micro:bit |  | | √ | |
 
 ## History
-- Date: 2026-1-26
-- Version: V1.0.0
+- 2026/01/26 -  V1.0.0
 
 ## Credits
 Written by PLELES (PLELES@dfrobot.com), 2026.01.26

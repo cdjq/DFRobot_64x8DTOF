@@ -21,9 +21,8 @@ DFRobot_64x8DTOF dtof64x8(Serial1, SERIAL_8N1, 25, 26);
 
 void setup() {
   Serial.begin(115200);
-  while(!Serial) { delay(10); }
+  while(!Serial);
   while(!dtof64x8.begin());
-
   Serial.println("DFRobot 64x8DTOF Multi-Point Demo");
   // Also demonstrate configuring single-frame mode (retry until success)
   Serial.println("Configuring frame mode: Single Frame (demo)...");
@@ -50,9 +49,9 @@ void setup() {
 
 void loop() {
   int cnt = dtof64x8.getData(300);
+  Serial.print("Got points: ");
+  Serial.println(cnt);
   if (cnt > 0) {
-    Serial.print("Got points: ");
-    Serial.println(cnt);
     for (int i = 0; i < cnt; i++) {
       char numbuf[16];
       Serial.print(DTOF_START_POINT + i);
