@@ -7,7 +7,7 @@
 #######################################
 
 DFRobot_64x8DTOF	KEYWORD1
-sPoint_t	KEYWORD1
+sPoint_t	     KEYWORD1
 eFrameMode_t	KEYWORD1
 eMeasureMode_t	KEYWORD1
 

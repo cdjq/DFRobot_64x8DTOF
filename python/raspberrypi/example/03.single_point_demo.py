@@ -55,6 +55,7 @@ def setup():
 
   time.sleep(2)
 
+
 def loop():
   # Trigger acquisition of one frame
   # returns lists: x, y, z, intensity

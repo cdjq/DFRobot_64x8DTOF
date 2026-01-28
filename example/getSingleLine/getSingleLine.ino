@@ -10,13 +10,13 @@
  */
 #include "DFRobot_64x8DTOF.h"
 DFRobot_64x8DTOF dtof64x8(Serial1, SERIAL_8N1, 25, 26);
-#define LINE_NUM    4
+#define LINE_NUM 4
 
 void setup()
 {
   Serial.begin(115200);
-  while(!Serial);
-  while(!dtof64x8.begin());
+  while (!Serial);
+  while (!dtof64x8.begin());
   Serial.println("Configuring frame mode: Single Frame...");
   while (!dtof64x8.configFrameMode(DFRobot_64x8DTOF::eFrameSingle)) {
     Serial.println("configFrameMode failed, retrying...");

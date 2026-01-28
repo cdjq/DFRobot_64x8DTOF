@@ -19,10 +19,10 @@ DFRobot_64x8DTOF dtof64x8(Serial1, SERIAL_8N1, 25, 26);
 void setup()
 {
   Serial.begin(115200);
-  while(!Serial);
-  while(!dtof64x8.begin());
+  while (!Serial);
+  while (!dtof64x8.begin());
   Serial.println("WY6005 Single Point Demo");
-  
+
   // Retry configuring frame mode until success
   Serial.println("Configuring frame mode: Single Frame...");
   while (!dtof64x8.configFrameMode(DFRobot_64x8DTOF::eFrameSingle)) {
@@ -56,7 +56,6 @@ void loop()
   } else {
     Serial.println("getData timeout or error");
   }
-  
 
   delay(500);
 }
