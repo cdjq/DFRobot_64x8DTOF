@@ -120,16 +120,15 @@ bool configFrameMode(eFrameMode_t mode);
 | Platform | Work Well | Work Wrong | Untested | Remarks |
 |----------|-----------|------------|----------|---------|
 | Arduino UNO |  |√| | |
-| Arduino MEGA2560 |  | |√| |
-| Arduino Leonardo |  | | √ | |
-| FireBeeetle-M0 |  | | √ | |
+| Arduino MEGA2560 |  | √|| |
+| Arduino Leonardo |  | √|  | |
+| FireBeeetle-M0 |  √| |  | |
 | FireBeeetle-ESP32-E |  √| |  | |
 | ESP8266 |  |√  | | |
-| Micro:bit |  | | √ | |
+
 
 ## History
-- 2026/01/26 -  V1.0.0
-
+- 2026/01/26 - Version 1.0.0 released.
 ## Credits
 Written by PLELES (PLELES@dfrobot.com), 2026.01.26
 [DFRobot Website](https://www.dfrobot.com/)
