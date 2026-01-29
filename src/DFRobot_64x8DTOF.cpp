@@ -132,7 +132,7 @@ bool DFRobot_64x8DTOF::setFrameMode(bool continuousMode)
 
 bool DFRobot_64x8DTOF::setOutputLineData(uint8_t line, uint8_t startPoint, uint8_t endPoint)
 {
-  // Validate line range (0 allowed for global/full configuration)
+  // Validat line range (0 allowed for global/full configuration)
   if (line > 8)
     return false;
 
@@ -303,3 +303,4 @@ int DFRobot_64x8DTOF::getData(uint32_t timeoutMs)
 
   return points;
 }
+
