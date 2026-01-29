@@ -49,7 +49,7 @@ DFRobot_64x8DTOF(HardwareSerial &serial, uint32_t config, int8_t rxPin, int8_t t
  * @brief 初始化传感器串口并开启数据流
  * @param baudRate 串口波特率（必须为 921600）
  * @return bool 如果初始化成功（串口启动并且数据流使能），否则返回 false
- * @note 目前 ESP8266 和 AVR（UNO）平台不被本库支持。
+ * @note 目前 ESP8266 和 AVR平台不被本库支持。
  * @note `begin()` 会尝试开启设备的数据流以验证设备是否存在。
  */
 bool begin(uint32_t baudRate = 921600);

@@ -15,20 +15,18 @@ import serial
 
 # pylint: disable=invalid-name
 
-
 class DFRobot_64x8DTOF:
   DTOF64X8_SYNC_BYTES = bytes([0x0A, 0x4F, 0x4B, 0x0A])
   DTOF64X8_FRAME_HEADER_SIZE = 4
   DTOF64X8_POINT_DATA_SIZE = 8
-  DTOF64X8_MAX_POINTS = 64 * 8
-
-  FRAME_MODE_SINGLE = 0x00
+  DTOF64X8_MAX_POINTS = 64 * 8  
+  
+  FRAME_MODE_SINGLE     = 0x00
   FRAME_MODE_CONTINUOUS = 0x01
 
   MEASURE_MODE_SINGLE_POINT = 0x00
   MEASURE_MODE_SINGLE_LINE = 0x01
   MEASURE_MODE_FULL = 0x02
-
   def __init__(self, port, baudrate=921600, timeout=0.5):
     '''
     @fn __init__
@@ -75,6 +73,7 @@ class DFRobot_64x8DTOF:
     self.ser.write(cmd)
     return self._find_sync(1.0)
 
+  
   def _set_stream_control(self, enable):
     '''
     @fn _set_stream_control
@@ -84,6 +83,7 @@ class DFRobot_64x8DTOF:
     '''
     return self._send_command(f"AT+STREAM_CONTROL={'1' if enable else '0'}")
 
+  
   def _set_frame_mode(self, continuous):
     '''
     @fn _set_frame_mode
@@ -93,6 +93,7 @@ class DFRobot_64x8DTOF:
     '''
     return self._send_command(f"AT+SPAD_FRAME_MODE={'1' if continuous else '0'}")
 
+  
   def _set_output_line_data(self, line, start_point, end_point):
     '''
     @fn _set_output_line_data
@@ -102,21 +103,8 @@ class DFRobot_64x8DTOF:
     @param end_point: End point index (1-64).
     @return bool: True if command sent successfully.
     '''
-    if line < 0 or line > 8:
-      return False
-    # line == 0 is used for global/full configuration and may accept device-specific
-    # start/end semantics (keep passthrough for compatibility)
-    if line == 0:
-      return self._send_command(f"AT+SPAD_OUTPUT_LINE_DATA={line},{start_point},{end_point}")
-    # For per-line configuration enforce 1..64 indexing for points
-    if start_point < 1 or start_point > 64:
-      return False
-    if end_point < 1 or end_point > 64:
-      return False
-    if end_point < start_point:
-      return False
     return self._send_command(f"AT+SPAD_OUTPUT_LINE_DATA={line},{start_point},{end_point}")
-
+  
   def _trigger_one_frame(self):
     '''
     @fn _trigger_one_frame
@@ -125,6 +113,7 @@ class DFRobot_64x8DTOF:
     '''
     return self._send_command("AT+SPAD_TRIG_ONE_FRAME=1")
 
+  
   def _save_config(self):
     '''
     @fn _save_config
@@ -190,7 +179,6 @@ class DFRobot_64x8DTOF:
     time.sleep(0.7)
     self.total_points = self.DTOF64X8_MAX_POINTS
     return self._set_stream_control(True)
-
   def _find_sync(self, timeout_s):
     '''
     @fn _find_sync
@@ -212,6 +200,8 @@ class DFRobot_64x8DTOF:
       else:
         idx = 1 if recv_byte[0] == self.DTOF64X8_SYNC_BYTES[0] else 0
     return False
+
+
 
   def config_frame_mode(self, mode):
     '''
@@ -250,19 +240,30 @@ class DFRobot_64x8DTOF:
     '''
     if len(args) == 0:
       return self._config_full_output_mode()
+
     if len(args) == 1:
       line = int(args[0])
+      if line < 1 or line > 8:
+        return False
       return self._config_single_line_mode(line, 1, 64)
+
     if len(args) == 2:
       line = int(args[0])
       point = int(args[1])
+      if line < 1 or line > 8 or point < 1 or point > 64:
+        return False
       return self._config_single_point_mode(line, point)
+
     if len(args) == 3:
       line = int(args[0])
       start_point = int(args[1])
       end_point = int(args[2])
+      if line < 1 or line > 8 or start_point < 1 or start_point > 64 or end_point < 1 or end_point > 64 or end_point < start_point:
+        return False
       return self._config_single_line_mode(line, start_point, end_point)
     raise TypeError('config_measure_mode accepts 0, 1, 2 or 3 arguments')
+
+
 
   def get_data(self, timeout_ms=500):
     '''
@@ -284,7 +285,7 @@ class DFRobot_64x8DTOF:
     y_list = []
     z_list = []
     i_list = []
-
+    
     start_time = time.time()
     timeout_s = timeout_ms / 1000.0
 
@@ -293,7 +294,7 @@ class DFRobot_64x8DTOF:
       while len(point_data) < self.DTOF64X8_POINT_DATA_SIZE:
         if (time.time() - start_time) > timeout_s:
           return [], [], [], []
-
+        
         if self.ser.in_waiting:
           needed = self.DTOF64X8_POINT_DATA_SIZE - len(point_data)
           chunk = self.ser.read(min(self.ser.in_waiting, needed))

@@ -168,14 +168,14 @@ public:
    * @param rxPin RX pin number
    * @param txPin TX pin number
    */
-  DFRobot_64x8DTOF(HardwareSerial& serial, uint32_t config, int8_t rxPin, int8_t txPin);
+  DFRobot_64x8DTOF(HardwareSerial& serial = Serial1, uint32_t config = SERIAL_8N1, int8_t rxPin = -1, int8_t txPin = -1);
 
   /**
    * @fn begin
     * @brief Initialize the sensor serial interface and enable data stream
     * @param baudRate Serial communication baud rate (must be 921600)
     * @return bool True if initialization succeeded (serial started and stream enabled), false on error
-    * @note On ESP8266 and AVR (UNO) platforms this function currently returns false (platform not supported).
+    * @note On ESP8266 and AVR platforms this function currently returns false (platform not supported).
     * @note The function will attempt to enable stream control on the device to verify presence.
    */
   bool begin(uint32_t baudRate = 921600);

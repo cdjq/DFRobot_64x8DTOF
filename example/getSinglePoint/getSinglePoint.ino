@@ -21,7 +21,7 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
   while (!dtof64x8.begin());
-  Serial.println("WY6005 Single Point Demo");
+  Serial.println("DFRobot 64x8DTOF Single Point Demo");
 
   // Retry configuring frame mode until success
   Serial.println("Configuring frame mode: Single Frame...");
@@ -29,12 +29,16 @@ void setup()
     Serial.println("Error: configFrameMode failed, retrying...");
     delay(200);
   }
-  Serial.println("Configuration Successful!");
+  Serial.println("Configuration Single Frame Successful!");
   // 2. Configure Single Point Mode (retry until success)
   // Example: Line 4, Point 32 (Center of the sensor roughly)
   // Line range: 1-8
   // Point range: 1-64
-  Serial.println("Configuring Single Point Mode (Line 4, Point 32)...");
+  Serial.print("Configuring Single Point Mode (Line ");
+  Serial.print(LINE_NUM);
+  Serial.print(", Point ");
+  Serial.print(POINT_NUM);
+  Serial.println(")...");
   while (!dtof64x8.configMeasureMode(LINE_NUM, POINT_NUM)) {
     Serial.println("Configuration Failed, retrying...");
     delay(200);

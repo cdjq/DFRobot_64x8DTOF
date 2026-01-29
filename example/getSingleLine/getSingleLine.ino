@@ -22,23 +22,23 @@ void setup()
     Serial.println("configFrameMode failed, retrying...");
     delay(200);
   }
-  Serial.println("Configuration successful.");
-  delay(300);
+  Serial.println("Configuration Single Frame Successful!");
+
   // Configure single line mode (retry until success)
-  Serial.println("Configuring Single Line Mode...");
+  Serial.print("Configured multi-point mode: line=");
+  Serial.print(LINE_NUM);
+  Serial.println(")");
   while (!dtof64x8.configMeasureMode(LINE_NUM)) {
     Serial.println("Configuration failed, retrying...");
     delay(200);
   }
   Serial.println("Configuration successful.");
-  Serial.print("Mode: Single Line (Line: ");
-  Serial.print(LINE_NUM);
-  Serial.println(")");
   delay(300);
 }
 
 void loop()
 {
+  Serial.println("12345");
   int cnt = dtof64x8.getData(300);
   Serial.print("Got points: ");
   Serial.println(cnt);

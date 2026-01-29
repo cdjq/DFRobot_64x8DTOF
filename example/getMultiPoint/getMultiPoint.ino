@@ -12,9 +12,9 @@
 #include "DFRobot_64x8DTOF.h"
 
 // Configure demo: line and point range
-#define DTOF_LINE        4
-#define DTOF_START_POINT 1
-#define DTOF_END_POINT   10
+#define DTOF_LINE        3
+#define DTOF_START_POINT 64
+#define DTOF_END_POINT   1
 
 // Use Serial1 for device communication on boards that support it
 DFRobot_64x8DTOF dtof64x8(Serial1, SERIAL_8N1, 25, 26);
@@ -31,20 +31,20 @@ void setup()
     Serial.println("configFrameMode failed, retrying...");
     delay(200);
   }
-  Serial.println("Frame mode configured: Single Frame");
+  Serial.println("Configuration Single Frame Successful!");
 
   // Configure multi-point mode using macros (retry until success)
-  Serial.println("Configuring Multi-Point Mode...");
-  while (!dtof64x8.configMeasureMode(DTOF_LINE, DTOF_START_POINT, DTOF_END_POINT)) {
-    Serial.println("configMeasureMode failed, retrying...");
-    delay(200);
-  }
   Serial.print("Configured multi-point mode: line=");
   Serial.print(DTOF_LINE);
   Serial.print(" start=");
   Serial.print(DTOF_START_POINT);
   Serial.print(" end=");
   Serial.println(DTOF_END_POINT);
+  while (!dtof64x8.configMeasureMode(DTOF_LINE, DTOF_START_POINT, DTOF_END_POINT)) {
+    Serial.println("configMeasureMode failed, retrying...");
+    delay(200);
+  }
+  Serial.println("Configuration Successful!");
   delay(300);
 }
 

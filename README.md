@@ -48,7 +48,7 @@ DFRobot_64x8DTOF(HardwareSerial &serial, uint32_t config, int8_t rxPin, int8_t t
  * @brief Initialize the sensor serial port and enable data stream
  * @param baudRate Serial communication baud rate (must be 921600)
  * @return bool True if initialization succeeded (serial started and stream enabled), false otherwise
- * @note ESP8266 and AVR (UNO) platforms are not supported by this library's current implementation.
+ * @note ESP8266 and AVR platforms are not supported by this library's current implementation.
  */
 bool begin(uint32_t baudRate = 921600);
 

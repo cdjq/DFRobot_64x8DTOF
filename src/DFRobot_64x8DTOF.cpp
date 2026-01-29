@@ -16,17 +16,16 @@ DFRobot_64x8DTOF::DFRobot_64x8DTOF(HardwareSerial& serial, uint32_t config, int8
   _config = config;
   _rxPin  = rxPin;
   _txPin  = txPin;
-  DBG("64x8DTOF initialized with serial port (by reference), config=0x%lx, rxPin=%d, txPin=%d", config, rxPin, txPin);
-  _startPoint  = 0;
   _endPoint    = 0;
   _totalPoints = 0;
 }
 
 bool DFRobot_64x8DTOF::begin(uint32_t baudRate)
 {
-// Not supported platforms: ESP8266 and AVR (UNO)
+// Not supported platforms: ESP8266 and AVR (UNO/Mega etc.)
+// Due to 921600 baud rate limitation, standard AVR 16MHz boards are not supported.
 #if defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_AVR)
-  DBG("Error: platform not supported (ESP8266/AVRUNO)");
+  DBG("Error: platform not supported (ESP8266/AVR)");
   return false;
 #endif
 
@@ -72,7 +71,6 @@ void DFRobot_64x8DTOF::clearBuffer(void)
 
 bool DFRobot_64x8DTOF::sendCommand(const String& command)
 {
-  //DBG("Sending command: %s", command.c_str());
   clearBuffer();
   _serial->print(command);
   _serial->print("\n");
@@ -166,6 +164,10 @@ bool DFRobot_64x8DTOF::saveConfig(void)
 
 bool DFRobot_64x8DTOF::configMeasureMode(uint8_t lineNum)
 {
+  if(lineNum <1 || lineNum > 8){
+    DBG("Error: lineNum out of range");
+    return false;
+  }
   if (!setStreamControl(false))
     return false;
   delay(700);
@@ -186,6 +188,10 @@ bool DFRobot_64x8DTOF::configMeasureMode(uint8_t lineNum)
 
 bool DFRobot_64x8DTOF::configMeasureMode(uint8_t lineNum, uint8_t pointNum)
 {
+  if(lineNum <1 || lineNum > 8 || pointNum < 1 || pointNum > 64){
+    DBG("Error: lineNum or pointNum out of range");
+    return false;
+  }
   if (!setStreamControl(false))
     return false;
   delay(700);
@@ -204,6 +210,10 @@ bool DFRobot_64x8DTOF::configMeasureMode(uint8_t lineNum, uint8_t pointNum)
 
 bool DFRobot_64x8DTOF::configMeasureMode(uint8_t lineNum, uint8_t startPoint, uint8_t endPoint)
 {
+  if(lineNum <1 || lineNum > 8 || startPoint < 1 || startPoint > 64 || endPoint < 1 || endPoint > 64 || endPoint < startPoint){
+    DBG("Error: lineNum, startPoint or endPoint out of range");
+    return false;
+  }
   if (!setStreamControl(false))
     return false;
   delay(700);
