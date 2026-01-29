@@ -289,7 +289,7 @@ class DFRobot_64x8DTOF:
     start_time = time.time()
     timeout_s = timeout_ms / 1000.0
 
-    for i in range(points):
+    for _ in range(points):
       point_data = bytearray()
       while len(point_data) < self.DTOF64X8_POINT_DATA_SIZE:
         if (time.time() - start_time) > timeout_s:

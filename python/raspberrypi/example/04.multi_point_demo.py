@@ -17,9 +17,9 @@ sys.path.append("../")
 from DFRobot_64x8DTOF import DFRobot_64x8DTOF
 
 # Configuration macros
-LINES = 4
-START_POINT = 10
-END_POINT = 20
+target_line = 4
+start_point = 10
+end_point = 20
 
 # Initialize sensor with UART port
 # If you are using a USB-to-serial converter, use '/dev/ttyUSB0'
@@ -49,11 +49,11 @@ def setup():
 
   # Configure to multi point mode using macros (retry until success)
   # Arguments: Line number, Start point, End point
-  print(f"Configuring Multi Point Mode (Line {LINES}, Points {START_POINT}-{END_POINT})...")
-  while not dtof64x8.config_measure_mode(LINES, START_POINT, END_POINT):
+  print(f"Configuring Multi Point Mode (Line {target_line}, Points {start_point}-{end_point})...")
+  while not dtof64x8.config_measure_mode(target_line, start_point, end_point):
     print("Config Multi Point Mode failed, retrying...")
     time.sleep(0.2)
-  print(f"Config Multi Point Mode (Line {LINES}, Points {START_POINT}-{END_POINT}): Success")
+  print(f"Config Multi Point Mode (Line {target_line}, Points {start_point}-{end_point}): Success")
 
   time.sleep(0.5)
 
@@ -61,13 +61,13 @@ def setup():
 def loop():
   # Trigger acquisition of one frame
   # returns lists: x, y, z, intensity
-  list_x, list_y, list_z, list_i = dtof64x8.get_data(timeout_ms=500)
+  list_x, list_y, list_z, _ = dtof64x8.get_data(timeout_ms=500)
 
   if len(list_x) > 0:
     print(f"Received {len(list_x)} points")
     # Output each point with Point[index] prefix and x,y,z values
-    for i in range(len(list_x)):
-      point_idx = START_POINT + i
+    for i, _ in enumerate(list_x):
+      point_idx = start_point + i
       print(f"Point[{point_idx:02d}] X:{list_x[i]:04d} mm Y:{list_y[i]:04d} mm Z:{list_z[i]:04d} mm")
   else:
     print("No data received or timeout")

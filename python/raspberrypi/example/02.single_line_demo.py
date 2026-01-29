@@ -16,7 +16,7 @@ import serial
 sys.path.append("../")
 from DFRobot_64x8DTOF import DFRobot_64x8DTOF
 # Macro: target line number for single line mode
-LINES = 9
+target_line = 9
 
 # Initialize sensor with UART port
 # If you are using a USB-to-serial converter, use '/dev/ttyUSB0'
@@ -44,12 +44,12 @@ def setup():
     time.sleep(0.2)
   print("Config Single Frame Mode: Success")
 
-  # Configure to single line mode (target line defined by LINES) (retry until success)
-  print(f"Configuring Single Line Mode (Line {LINES})...")
-  while not dtof64x8.config_measure_mode(LINES):
+  # Configure to single line mode (target line defined by target_line) (retry until success)
+  print(f"Configuring Single Line Mode (Line {target_line})...")
+  while not dtof64x8.config_measure_mode(target_line):
     print("Config Single Line Mode failed, retrying...")
     time.sleep(0.2)
-  print(f"Config Single Line Mode (Line {LINES}): Success")
+  print(f"Config Single Line Mode (Line {target_line}): Success")
 
   time.sleep(2)
 
@@ -59,7 +59,7 @@ def loop():
   list_x, list_y, list_z, list_i = dtof64x8.get_data(timeout_ms=500)
 
   if len(list_x) > 0:
-    print(f"Received {len(list_x)} points from line {LINES}")
+    print(f"Received {len(list_x)} points from line {target_line}")
     # Print data for every point
     for idx, x_val in enumerate(list_x):
       print(f"Point[{idx+1:02d}]: X:{x_val:04d} mm Y:{list_y[idx]:04d} mm Z:{list_z[idx]:04d} mm I:{list_i[idx]}")
