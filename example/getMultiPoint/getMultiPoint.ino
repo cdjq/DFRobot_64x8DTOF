@@ -13,11 +13,11 @@
 
 // Configure demo: line and point range
 #define DTOF_LINE        3
-#define DTOF_START_POINT 64
-#define DTOF_END_POINT   1
+#define DTOF_START_POINT 1
+#define DTOF_END_POINT   64
 
 // Use Serial1 for device communication on boards that support it
-DFRobot_64x8DTOF dtof64x8(Serial1, SERIAL_8N1, 25, 26);
+DFRobot_64x8DTOF dtof64x8(Serial2, SERIAL_8N1, 17, 16);
 
 void setup()
 {
@@ -75,6 +75,8 @@ void loop()
   } else {
     Serial.println("getData timeout or error");
   }
+
+  
   delay(500);
 }
 

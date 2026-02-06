@@ -1,4 +1,4 @@
-#######################################
+﻿#######################################
 # Syntax Coloring Map For DFRobot_64x8DTOF
 #######################################
 
@@ -6,27 +6,27 @@
 # Datatypes (KEYWORD1)
 #######################################
 
-DFRobot_64x8DTOF	KEYWORD1
-sPoint_t	     KEYWORD1
-eFrameMode_t	KEYWORD1
-eMeasureMode_t	KEYWORD1
+DFRobot_64x8DTOF		KEYWORD1
+sPoint_t			KEYWORD1
+eFrameMode_t			KEYWORD1
+eMeasureMode_t			KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
 
-begin	KEYWORD2
-sendCommand	KEYWORD2
-setStreamControl	KEYWORD2
-setFrameMode	KEYWORD2
-setOutputLineData	KEYWORD2
-triggerOneFrame	KEYWORD2
-saveConfig	KEYWORD2
-configMeasureMode	KEYWORD2
-configFrameMode	KEYWORD2
-getData	KEYWORD2
-parsePointData	KEYWORD2
-clearBuffer	KEYWORD2
+begin				KEYWORD2
+sendCommand			KEYWORD2
+setStreamControl		KEYWORD2
+setFrameMode			KEYWORD2
+setOutputLineData		KEYWORD2
+triggerOneFrame			KEYWORD2
+saveConfig			KEYWORD2
+configMeasureMode		KEYWORD2
+configFrameMode			KEYWORD2
+getData				KEYWORD2
+parsePointData			KEYWORD2
+clearBuffer			KEYWORD2
 
 #######################################
 # Constants and Enum Values (LITERAL1)
@@ -35,16 +35,16 @@ clearBuffer	KEYWORD2
 DTOF64X8_RESPONSE_TIMEOUT	LITERAL1
 DTOF64X8_MAX_RETRY_COUNT	LITERAL1
 DTOF64X8_RESPONSE_OK_SEQ_LEN	LITERAL1
-DTOF64X8_SYNC_BYTE_0	LITERAL1
-DTOF64X8_SYNC_BYTE_1	LITERAL1
-DTOF64X8_SYNC_BYTE_2	LITERAL1
-DTOF64X8_SYNC_BYTE_3	LITERAL1
+DTOF64X8_SYNC_BYTE_0		LITERAL1
+DTOF64X8_SYNC_BYTE_1		LITERAL1
+DTOF64X8_SYNC_BYTE_2		LITERAL1
+DTOF64X8_SYNC_BYTE_3		LITERAL1
 DTOF64X8_FRAME_HEADER_SIZE	LITERAL1
 DTOF64X8_POINT_DATA_SIZE	LITERAL1
-DTOF64X8_MAX_POINTS	LITERAL1
+DTOF64X8_MAX_POINTS		LITERAL1
 
-eFrameSingle	LITERAL1
-eFrameContinuous	LITERAL1
-eMeasureModeSinglePoint	LITERAL1
-eMeasureModeSingleLine	LITERAL1
-eMeasureModeFull	LITERAL1
+eFrameSingle			LITERAL1
+eFrameContinuous		LITERAL1
+eMeasureModeSinglePoint		LITERAL1
+eMeasureModeSingleLine		LITERAL1
+eMeasureModeFull		LITERAL1

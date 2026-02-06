@@ -3,9 +3,8 @@
 
 ## 概述
 DFRobot_64x8DTOF 是一款高精度 DToF（飞行时间）传感器模块，提供紧凑尺寸下的精确距离测量。模块支持串口通信、多种工作模式和高分辨率的距离点云输出，适用于机器人、自动化、接近检测等场景。
-
-## 产品链接
-[64x8DTOF DToF Sensor](https://www.dfrobot.com.cn/)
+![正面svg效果图](./resourses/images/64x8DTOF.png)
+## 产品链接 (https://www.dfrobot.com.cn/)
 
 ```text
 SKU: SEN0682
@@ -18,7 +17,7 @@ SKU: SEN0682
   * [方法](#方法)
   * [兼容性](#兼容性)
   * [历史](#历史)
-  * [致谢](#致谢)
+  * [创作者](#创作者)
 
 ## 概要
 本库提供在 Arduino 上驱动 64x8DTOF 传感器的实现，包含传感器配置、触发采样、读取原始点云数据等功能，便于在不同应用中集成实时距离或点云采集。
@@ -125,5 +124,4 @@ bool configFrameMode(eFrameMode_t mode);
 - 2026/01/26 - 1.0.0 版本
 
 ## 创作者
-作者: PLELES (PLELES@dfrobot.com)，2026.01.26
-[DFRobot Website](https://www.dfrobot.com/)
+Written by PLELES (PLELES@dfrobot.com),2026.(Welcome to our [website](https://www.dfrobot.com/))

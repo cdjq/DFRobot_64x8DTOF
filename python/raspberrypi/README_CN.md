@@ -3,9 +3,8 @@
 * [English Version](./README.md)
 
 64x8DTOF 是一款高精度 3D ToF（飞行时间）传感器模块，通过串口输出点云/距离数据。此文档说明如何在树莓派上使用 64x8DTOF 的 Python 驱动。
-
-## 产品链接
-[64x8DTOF ToF Sensor](https://www.dfrobot.com/)
+![正面svg效果图](../../resourses/images/64x8DTOF.png)
+## 产品链接 (https://www.dfrobot.com.cn/)
 
 ```text
 SKU: SEN0682
@@ -105,5 +104,5 @@ def get_data(self, timeout_ms=500):
 
 ## 创作者
 
-作者: PLELES (PLELES@dfrobot.com)
-[DFRobot 网站](https://www.dfrobot.com/)
+Written by PLELES (PLELES@dfrobot.com),2026.(Welcome to our [website](https://www.dfrobot.com/))
+

@@ -5,9 +5,8 @@
 The DFRobot_64x8DTOF is a high-precision DToF (Time of Flight) sensor module that provides accurate distance measurements in a compact form factor. It features serial communication interface, multiple operating modes, and high-resolution distance data, making it suitable for applications in robotics, automation,proximity sensing.
 
 The sensor includes built-in signal processing capabilities and supports various output modes to meet different application requirements. Each 64x8DTOF sensor is factory calibrated and can be easily integrated into your project via the serial interface.
-
-## Product Link
-[64x8DTOF DToF Sensor](https://www.dfrobot.com/)
+![正面svg效果图](./resourses/images/64x8DTOF.png)
+## Product Link  (https://www.dfrobot.com/)
 
 ```text
 SKU: SEN0682
@@ -130,5 +129,4 @@ bool configFrameMode(eFrameMode_t mode);
 ## History
 - 2026/01/26 - Version 1.0.0 released.
 ## Credits
-Written by PLELES (PLELES@dfrobot.com), 2026.01.26
-[DFRobot Website](https://www.dfrobot.com/)
+Written by PLELES (PLELES@dfrobot.com),2026.(Welcome to our [website](https://www.dfrobot.com/))

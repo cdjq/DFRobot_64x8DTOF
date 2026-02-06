@@ -236,7 +236,7 @@ public:
    * @retval false Configuration failed
    */
   bool configFrameMode(eFrameMode_t mode);
-
+  
   sPoint_t point; /*!< Point data */
 };
 
