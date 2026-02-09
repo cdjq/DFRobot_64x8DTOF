@@ -16,7 +16,7 @@ import serial
 sys.path.append("../")
 from DFRobot_64x8DTOF import DFRobot_64x8DTOF
 # Macro: target line number for single line mode
-target_line = 9
+target_line = 4
 
 # Initialize sensor with UART port
 # If you are using a USB-to-serial converter, use '/dev/ttyUSB0'
