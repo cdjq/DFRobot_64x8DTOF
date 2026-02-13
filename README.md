@@ -5,7 +5,7 @@
 The DFRobot_64x8DTOF is a high-precision DToF (Time of Flight) sensor module that provides accurate distance measurements in a compact form factor. It features serial communication interface, multiple operating modes, and high-resolution distance data, making it suitable for applications in robotics, automation,proximity sensing.
 
 The sensor includes built-in signal processing capabilities and supports various output modes to meet different application requirements. Each 64x8DTOF sensor is factory calibrated and can be easily integrated into your project via the serial interface.
-![正面svg效果图](./resourses/images/64x8DTOF.png)
+![正面svg效果图](./resources/images/64x8DTOF.png)
 ## Product Link  (https://www.dfrobot.com/)
 
 ```text
@@ -28,10 +28,27 @@ This library provides a way to drive the 64x8DTOF ToF sensor under the Arduino I
 1. Download the library file from the GitHub repository.
 2. Paste it into the Arduino libraries directory.
 3. Open the examples folder and run the demo sketch to test the sensor.
+4. Example Explanation
+   - `getMultiPoint.ino`: Demonstrates reading the x, y, z coordinates and intensity values of multiple points.
+   - `getSinglePoint.ino`: Demonstrates reading the x, y, z coordinates and intensity values of a single point.
+   - `getSingleLine.ino`: Demonstrates reading the x, y, z coordinates and intensity values of a single line.
 
 ## Methods
 ### Arduino C++ Library
+
+
 ```C++
+/**
+ * @struct sPoint_t
+ * @brief DFRobot 64x8DTOF sensor point data structure
+ */
+typedef struct {
+    int16_t xBuf[DTOF64X8_MAX_POINTS]; /*!< X-axis coordinate buffer */
+    int16_t yBuf[DTOF64X8_MAX_POINTS]; /*!< Y-axis coordinate buffer */
+    int16_t zBuf[DTOF64X8_MAX_POINTS]; /*!< Z-axis coordinate buffer(Distance) */
+    int16_t iBuf[DTOF64X8_MAX_POINTS]; /*!< Array storing intensity values. */
+} sPoint_t;
+
 /**
  * @fn DFRobot_64x8DTOF
  * @brief Constructor, passing in serial port and configuration
@@ -122,11 +139,11 @@ bool configFrameMode(eFrameMode_t mode);
 | Arduino MEGA2560 |  | √|| |
 | Arduino Leonardo |  | √|  | |
 | FireBeeetle-M0 |  √| |  | |
-| FireBeeetle-ESP32-E |  √| |  | |
+| FireBeeetle2 -ESP32-E |  √| |  | |
 | ESP8266 |  |√  | | |
 
 
 ## History
 - 2026/01/26 - Version 1.0.0 released.
 ## Credits
-Written by PLELES (PLELES@dfrobot.com),2026.(Welcome to our [website](https://www.dfrobot.com/))
+Written by PLELES (feng.yang@dfrobot.com),2026.(Welcome to our [website](https://www.dfrobot.com/))

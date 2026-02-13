@@ -3,7 +3,7 @@
 * [中文版](./README_CN.md)
 
 The DFRobot 64x8DTOF is a high-precision 3D ToF (Time of Flight) sensor module providing dense distance point-cloud output over a serial interface. This document describes using the 64x8DTOF Python driver on Raspberry Pi.
-![正面svg效果图](../../resourses/images/64x8DTOF.png)
+![正面svg效果图](../../resources/images/64x8DTOF.png)
 ## Product Link  (https://www.dfrobot.com/)
 
 ```text
@@ -99,10 +99,9 @@ def get_data(self, timeout_ms=500):
 
 ## History
 
-- Date: 2026-1-21
-- Version: V1.0.0
+- 2026/01/26 - Version 1.0.0 released.
 
 ## Credits
 
-Written by PLELES (PLELES@dfrobot.com),2026.(Welcome to our [website](https://www.dfrobot.com/))
+Written by PLELES (feng.yang@dfrobot.com),2026.(Welcome to our [website](https://www.dfrobot.com/))
 

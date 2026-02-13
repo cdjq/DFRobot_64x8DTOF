@@ -3,7 +3,7 @@
 
 ## 概述
 DFRobot_64x8DTOF 是一款高精度 DToF（飞行时间）传感器模块，提供紧凑尺寸下的精确距离测量。模块支持串口通信、多种工作模式和高分辨率的距离点云输出，适用于机器人、自动化、接近检测等场景。
-![正面svg效果图](./resourses/images/64x8DTOF.png)
+![正面svg效果图](./resources/images/64x8DTOF.png)
 ## 产品链接 (https://www.dfrobot.com.cn/)
 
 ```text
@@ -28,11 +28,26 @@ SKU: SEN0682
 1. 从仓库下载库文件。
 2. 将库复制到 Arduino 的 `libraries` 目录中。
 3. 打开 `examples` 文件夹中的示例并上传测试。
-
+4. 示例解释
+   - `getMultiPoint.ino`： 展示读取多点的的x、y、z坐标和强度值。
+   - `getSinglePoint.ino`：展示读取单个点的x、y、z坐标和强度值。
+   - `getSingleLine.ino`： 展示读取单行的x、y、z坐标和强度值。
 
 ## 方法
 ### Arduino C++ 库
+
 ```C++
+/**
+ * @struct sPoint_t
+ * @brief 该结构体用于存储从传感器获取的点云数据。
+ */
+typedef struct {
+  int16_t xBuf[DTOF64X8_MAX_POINTS]; /*!< 存储X轴坐标的数组 */
+  int16_t yBuf[DTOF64X8_MAX_POINTS]; /*!< 存储Y轴坐标的数组 */
+  int16_t zBuf[DTOF64X8_MAX_POINTS]; /*!< 存储Z轴坐标（距离）的数组 */
+  int16_t iBuf[DTOF64X8_MAX_POINTS]; /*!< 存储强度值的数组 */
+} sPoint_t;
+
 /**
  * @fn DFRobot_64x8DTOF
  * @brief 构造函数，传入串口和配置
@@ -116,7 +131,7 @@ bool configFrameMode(eFrameMode_t mode);
 | Arduino MEGA2560 |  | √|| |
 | Arduino Leonardo |  | √|  | |
 | FireBeeetle-M0 | √ | |  | |
-| FireBeeetle-ESP32-E |  √| |  | |
+| FireBeeetle2 -ESP32-E |  √| |  | |
 | ESP8266 |  |√  | | |
 
 
@@ -124,4 +139,4 @@ bool configFrameMode(eFrameMode_t mode);
 - 2026/01/26 - 1.0.0 版本
 
 ## 创作者
-Written by PLELES (PLELES@dfrobot.com),2026.(Welcome to our [website](https://www.dfrobot.com/))
+Written by PLELES (feng.yang@dfrobot.com),2026.(Welcome to our [website](https://www.dfrobot.com/))

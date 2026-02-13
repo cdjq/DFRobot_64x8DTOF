@@ -4,7 +4,7 @@
  * @copyright  Copyright (c) 2026 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @license The MIT License (MIT)
  * @author [PLELES] (feng.yang@dfrobot.com)
- * @version V1.0
+ * @version V1.0.0
  * @date 2026-1-21
  * @url https://github.com/DFRobot/DFRobot_64x8DTOF
  */
@@ -53,9 +53,9 @@ void loop()
   if (parsed > 0) {
     char numbuf[16];
     Serial.print("Point Data -> ");
-    Serial.print("X: "); sprintf(numbuf, "%04d", dtof64x8.point.xBuf[0]); Serial.print(numbuf); Serial.print(" mm, ");
-    Serial.print("Y: "); sprintf(numbuf, "%04d", dtof64x8.point.yBuf[0]); Serial.print(numbuf); Serial.print(" mm, ");
-    Serial.print("Z: "); sprintf(numbuf, "%04d", dtof64x8.point.zBuf[0]); Serial.print(numbuf); Serial.print(" mm, ");
+    Serial.print("X: "); sprintf(numbuf, "%4d", dtof64x8.point.xBuf[0]); Serial.print(numbuf); Serial.print(" mm, ");
+    Serial.print("Y: "); sprintf(numbuf, "%4d", dtof64x8.point.yBuf[0]); Serial.print(numbuf); Serial.print(" mm, ");
+    Serial.print("Z: "); sprintf(numbuf, "%4d", dtof64x8.point.zBuf[0]); Serial.print(numbuf); Serial.print(" mm, ");
     Serial.print("I: "); Serial.println(dtof64x8.point.iBuf[0]); 
   } else {
     Serial.println("getData timeout or error");

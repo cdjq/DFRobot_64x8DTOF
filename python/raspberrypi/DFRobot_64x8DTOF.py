@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 '''
+@file DFRobot_64x8DTOF.py
+@brief Define the basic structure and methods of the DFRobot_64x8DTOF class.
 @copyright   Copyright (c) 2026 DFRobot Co.Ltd (http://www.dfrobot.com)
 @license     The MIT license (MIT)
 @author [PLELES] (feng.yang@dfrobot.com)
-@version  V1.0
+@version  V1.0.0
 @date  2026-1-21
-@file DFRobot_64x8DTOF.py
-@brief Define the basic structure and methods of the DFRobot_64x8DTOF class.
+@https://github.com/DFRobot/DFRobot_64x8DTOF
 '''
 
 import struct
